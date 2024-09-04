@@ -16,6 +16,7 @@ public class PostDto {
 	 Long id;
 	 String caption;
 	 String mediaUrl;
+
 	 Long userId;
 	 Set<Long> likedUserIds;
 	 List<PostCommentDto> comments;

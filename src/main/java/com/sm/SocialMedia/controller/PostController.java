@@ -11,15 +11,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sm.SocialMedia.Response.ApiResponse;
 import com.sm.SocialMedia.dto.PostCommentDto;
 import com.sm.SocialMedia.dto.PostDto;
-import com.sm.SocialMedia.service.postCommentService;
+import com.sm.SocialMedia.dto.UsersDto;
+import com.sm.SocialMedia.service.PostCommentService;
 import com.sm.SocialMedia.service.postService;
+import com.sm.SocialMedia.service.userService;
 
 @RestController
 @RequestMapping("api/posts")
@@ -29,17 +31,22 @@ public class PostController {
 	postService pService;
 	
 	@Autowired
-	postCommentService cService;
+	PostCommentService cService;
 	
-	@PostMapping("/user/{userId}")
-	public ResponseEntity<PostDto> createPost(@RequestBody PostDto post ,@PathVariable Long userId){
-		PostDto createPost = pService.createNewPost(post, userId);
+	@Autowired
+	userService uService;
+	
+	@PostMapping
+	public ResponseEntity<PostDto> createPost(@RequestBody PostDto post ,@RequestHeader("Authorization") String jwt){
+		UsersDto udto = uService.getUserfromToken(jwt);
+		PostDto createPost = pService.createNewPost(post, udto.getId());
 		return new ResponseEntity<>(createPost , HttpStatus.ACCEPTED);
 	}
 	
-	@DeleteMapping("/{postId}/user/{userId}")
-	public ResponseEntity<ApiResponse> deletePost(@PathVariable Long postId , @PathVariable Long userId){
-		String message = pService.deletePost(postId, userId);
+	@DeleteMapping("{postId}")
+	public ResponseEntity<ApiResponse> deletePost(@PathVariable Long postId , @RequestHeader("Authorization") String jwt){
+		UsersDto udto = uService.getUserfromToken(jwt);
+		String message = pService.deletePost(postId,udto.getId());
 		ApiResponse res = new ApiResponse(message , true);
 		return new ResponseEntity<>(res , HttpStatus.OK);
 	}
@@ -51,44 +58,49 @@ public class PostController {
 		return new ResponseEntity<>(post , HttpStatus.ACCEPTED);
 	}
 	
-	@GetMapping("/user/{userId}")
-	public ResponseEntity<List<PostDto>> findUsersPost(@PathVariable Long userId){
-		List<PostDto> userPosts= pService.findPostByUserId(userId);
+	@GetMapping
+	public ResponseEntity<List<PostDto>> findUsersPost(@RequestHeader("Authorization") String jwt){
+		UsersDto udto = uService.getUserfromToken(jwt);
+		List<PostDto> userPosts= pService.findPostByUserId(udto.getId());
 		return new ResponseEntity<>(userPosts , HttpStatus.OK); 
 	}
 	
-	@GetMapping
+	@GetMapping("all")
 	public ResponseEntity<List<PostDto>> findAllPost(){
 		List<PostDto> posts = pService.findAllPost();
 		return new ResponseEntity<>(posts , HttpStatus.OK);
 	}
 	
-	@PutMapping("/save/{postId}/user/{userId}")
-	public ResponseEntity<PostDto> savedPostHandler(@PathVariable Long postId , @PathVariable Long userId){
-		PostDto post = pService.savedPost(postId, userId);
+	@PutMapping("/save/{postId}")
+	public ResponseEntity<PostDto> savedPostHandler(@PathVariable Long postId , @RequestHeader("Authorization") String jwt){
+		UsersDto udto = uService.getUserfromToken(jwt);
+		PostDto post = pService.savedPost(postId, udto.getId());
 		
 		return new ResponseEntity<>(post , HttpStatus.ACCEPTED);
 	}
 	
-	@PutMapping("/like/{postId}/user/{userId}")
-	public ResponseEntity<PostDto> LikePostHandler(@PathVariable Long postId , @PathVariable Long userId){
-		PostDto post = pService.likePost(postId, userId);
+	@PutMapping("/like/{postId}")
+	public ResponseEntity<PostDto> LikePostHandler(@PathVariable Long postId , @RequestHeader("Authorization") String jwt){
+		UsersDto udto = uService.getUserfromToken(jwt);
+		PostDto post = pService.likePost(postId, udto.getId());
 		
 		return new ResponseEntity<>(post , HttpStatus.ACCEPTED);
 	}
 	
-	@PostMapping("{postId}/comments/user/{userId}")
-	public ResponseEntity<PostCommentDto> addComment(@PathVariable Long postId , @PathVariable Long userId , @RequestBody PostCommentDto cdto) {
-		 PostCommentDto comment = cService.addComment(userId, postId, cdto);
+	@PostMapping("{postId}/comments")
+	public ResponseEntity<PostCommentDto> addComment(@PathVariable Long postId , @RequestHeader("Authorization") String jwt , @RequestBody PostCommentDto cdto) {
+		UsersDto udto = uService.getUserfromToken(jwt);
+		 PostCommentDto comment = cService.addComment(udto.getId(), postId, cdto);
 		 
 		 return new ResponseEntity<>(comment , HttpStatus.ACCEPTED);
 	}
 	
-	@DeleteMapping("/comments/{commentId}/user/{userId}")
-	public ResponseEntity<String> deleteComment(@PathVariable Long commentId ,@PathVariable Long userId){
-		String message = cService.deleteComment(userId, commentId);
+	@DeleteMapping("/comments/{commentId}")
+	public ResponseEntity<ApiResponse> deleteComment(@PathVariable Long commentId ,@RequestHeader("Authorization") String jwt){
+		UsersDto udto = uService.getUserfromToken(jwt);
+		String message = cService.deleteComment(udto.getId(), commentId);
 		ApiResponse res = new ApiResponse(message , true);
 		
-		return new ResponseEntity<>(message , HttpStatus.OK);
+		return new ResponseEntity<>(res , HttpStatus.OK);
 	}
 }

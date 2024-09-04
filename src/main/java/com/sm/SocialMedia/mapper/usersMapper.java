@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.stream.Collectors;
 
 import com.sm.SocialMedia.dto.UsersDto;
+import com.sm.SocialMedia.dto.UsersRegisterDto;
 import com.sm.SocialMedia.entity.Users;
 
 public class usersMapper {
@@ -21,15 +22,13 @@ public class usersMapper {
 	            user.getPosts()!= null ?
 	            	user.getPosts().stream().map(postMapper::mapToPostDto).collect(Collectors.toList()) : new ArrayList<>(),
 	            user.getSavedPost() != null ? 
-	                user.getSavedPost().stream().map(postMapper::mapToPostDto).collect(Collectors.toSet()) : new HashSet<>()
+	                user.getSavedPost().stream().map(postMapper::mapToPostDto).collect(Collectors.toSet()) : new HashSet<>(),
+	            user.getRoles() != null ?
+	            		user.getRoles().stream().collect(Collectors.toSet()) : new HashSet<>()
 	        );
 	}
 
-	public static Users mapToUser(UsersDto userDto) {
-		return new Users(userDto.getId(), userDto.getUsername(), userDto.getEmail(), userDto.getGender(),
-				new HashSet<>(), // Followers and Followings will be handled separately
-				new HashSet<>(),
-				new ArrayList<>(),
-				new HashSet<>());
+	public static Users mapToUser(UsersRegisterDto RuserDto) {
+		return new Users(RuserDto.getUsername(), RuserDto.getEmail(), RuserDto.getPassword() , RuserDto.getGender());
 	}
 }

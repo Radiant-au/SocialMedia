@@ -3,12 +3,11 @@ package com.sm.SocialMedia.service;
 import java.util.List;
 
 import com.sm.SocialMedia.dto.UsersDto;
+import com.sm.SocialMedia.dto.UsersRegisterDto;
 
 public interface userService {
 	
 	public List<UsersDto> getAllUser();
-	
-	public UsersDto registerUser(UsersDto udto);
 	
 	public UsersDto getUserbyId(Long id);
 	
@@ -16,7 +15,9 @@ public interface userService {
 	
 	public UsersDto followUser(Long id1 , Long id2);
 	
-	public UsersDto UpdateUser(Long id ,UsersDto udto);
+	public UsersDto UpdateUser(Long id ,UsersRegisterDto udto);
 	
 	public List<UsersDto> searchUser(String query);
+	
+	public UsersDto getUserfromToken(String token);
 }
