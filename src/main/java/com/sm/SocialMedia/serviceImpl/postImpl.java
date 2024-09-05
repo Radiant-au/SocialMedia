@@ -11,7 +11,6 @@ import com.sm.SocialMedia.dto.UsersDto;
 import com.sm.SocialMedia.entity.Post;
 import com.sm.SocialMedia.entity.Users;
 import com.sm.SocialMedia.mapper.postMapper;
-import com.sm.SocialMedia.mapper.usersMapper;
 import com.sm.SocialMedia.repository.postRepostitory;
 import com.sm.SocialMedia.repository.userRepository;
 import com.sm.SocialMedia.service.postService;
@@ -34,7 +33,7 @@ public class postImpl implements postService{
 	@Override
 	public PostDto createNewPost(PostDto postdto, Long userId) {
 		
-		Users user = usersMapper.mapToUser(uService.getUserbyId(userId));
+		Users user = userRepo.findById(userId).orElseThrow(()-> new IllegalStateException("There is no user with " + userId));
 		Post newPost = new Post();
 		newPost.setCaption(postdto.getCaption());
 		newPost.setMediaUrl(postdto.getMediaUrl());

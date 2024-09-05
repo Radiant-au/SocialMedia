@@ -7,7 +7,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.sm.SocialMedia.config.jwtGenerator;
 import com.sm.SocialMedia.dto.UsersDto;
+import com.sm.SocialMedia.dto.UsersRegisterDto;
 import com.sm.SocialMedia.entity.Users;
 import com.sm.SocialMedia.mapper.usersMapper;
 import com.sm.SocialMedia.repository.userRepository;
@@ -19,17 +21,11 @@ public class usersImpl implements userService{
 	private userRepository userRepo;
 	
 
-	public usersImpl(userRepository userRepo ) {
+	public usersImpl(userRepository userRepo) {
 		this.userRepo = userRepo;
 	}
 	
 
-	@Override
-	public UsersDto registerUser(UsersDto udto) {
-		Users user = usersMapper.mapToUser(udto);
-		Users savedUser = userRepo.save(user);
-		return usersMapper.mapToUserDto(savedUser);
-	}
 
 	@Override
 	public UsersDto getUserbyId(Long id) {
@@ -39,7 +35,7 @@ public class usersImpl implements userService{
 
 	@Override
 	public UsersDto findByEmail(String email) {
-		Users user = userRepo.findByEmail(email);
+		Users user = userRepo.findByEmail(email).orElseThrow(()-> new IllegalStateException("User does not exist with email = "+ email));
 		return usersMapper.mapToUserDto(user);
 	}
 
@@ -55,7 +51,7 @@ public class usersImpl implements userService{
 	}
 
 	@Override
-	public UsersDto UpdateUser(Long id,UsersDto udto) {
+	public UsersDto UpdateUser(Long id,UsersRegisterDto udto) {
 		Users user = userRepo.findById(id).orElseThrow(() -> new IllegalStateException("User does not exist wiht Id = " + id));
 		Optional.ofNullable(udto.getUsername()).ifPresent(user::setUsername);
 		Optional.ofNullable(udto.getEmail()).ifPresent(user::setEmail);
@@ -75,6 +71,15 @@ public class usersImpl implements userService{
 	@Override
 	public List<UsersDto> getAllUser() {
 		return userRepo.findAll().stream().map(usersMapper::mapToUserDto).collect(Collectors.toList());
+	}
+
+
+
+	@Override
+	public UsersDto getUserfromToken(String token) {
+		String email = jwtGenerator.getEmailfromToken(token);
+		Users user = userRepo.findByEmail(email).orElseThrow(() -> new IllegalStateException("There is no user with email =" + email));
+		return usersMapper.mapToUserDto(user);
 	}
 
 }

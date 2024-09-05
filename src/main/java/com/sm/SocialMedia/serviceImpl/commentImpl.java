@@ -11,12 +11,12 @@ import com.sm.SocialMedia.mapper.postCommentMapper;
 import com.sm.SocialMedia.repository.commentRepository;
 import com.sm.SocialMedia.repository.postRepostitory;
 import com.sm.SocialMedia.repository.userRepository;
-import com.sm.SocialMedia.service.postCommentService;
+import com.sm.SocialMedia.service.PostCommentService;
 
 import jakarta.transaction.Transactional;
 
 @Service
-public class commentImpl implements postCommentService{
+public class commentImpl implements PostCommentService{
 	
 	 @Autowired
 	 private commentRepository postCommentRepo;

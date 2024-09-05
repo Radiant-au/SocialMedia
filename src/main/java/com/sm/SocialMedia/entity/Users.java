@@ -16,11 +16,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -58,17 +59,21 @@ public class Users {
 	   )
 	   private Set<Post> savedPost = new HashSet<>();
 	  
+	  @ManyToMany(fetch = FetchType.EAGER)
+	  @JoinTable(
+	        name = "user_roles",
+	        joinColumns = @JoinColumn(name = "user_id"),
+	        inverseJoinColumns = @JoinColumn(name = "role_id")
+	    )
+	    private Set<Role> roles = new HashSet<>();
+
+	public Users( String username, String email, String password, String gender) {
+		this.username = username;
+		this.email = email;
+		this.password = password;
+		this.gender = gender;
+	}
 	  
-	  public Users(Long id, String username, String email, String gender, Set<Users> followings, Set<Users> followers ,List<Post> posts, Set<Post> savedPost) {
-			super();
-			this.id = id;
-			this.username = username;
-			this.email = email;
-			this.gender = gender;
-			this.followings = followings;
-			this.followers = followers;
-			this.posts = posts;
-			this.savedPost = savedPost;
-		}
+	  
 	
 }

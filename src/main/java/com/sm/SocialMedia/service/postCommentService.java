@@ -2,7 +2,7 @@ package com.sm.SocialMedia.service;
 
 import com.sm.SocialMedia.dto.PostCommentDto;
 
-public interface postCommentService {
+public interface PostCommentService {
 	
 	public PostCommentDto addComment(Long userId , Long postId , PostCommentDto pdto);
 	
