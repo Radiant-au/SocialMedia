@@ -31,7 +31,7 @@ public class commentImpl implements PostCommentService{
 	@Override
 	public PostCommentDto addComment(Long userId, Long postId, PostCommentDto pdto) {
 		Post post = postRepo.findById(postId).orElseThrow(() -> new IllegalStateException("There is no post"));
-		Users user = userRepo.findById(userId).orElseThrow(() -> new IllegalStateException("There is no post"));
+		Users user = userRepo.findById(userId).orElseThrow(() -> new IllegalStateException("There is no user"));
 		
 		PostComment comment = new PostComment();
 		 comment.setPost(post);
@@ -53,6 +53,43 @@ public class commentImpl implements PostCommentService{
 
 	    postCommentRepo.delete(comment);
 	    return "Comment deleted successfully";
+	}
+
+	@Override
+	public PostCommentDto likeComment(Long commentId, Long userId) {
+		PostComment comment = postCommentRepo.findById(commentId).orElseThrow(()-> new IllegalStateException("There is no post with " + commentId));
+		Users user = userRepo.findById(userId).orElseThrow(() -> new IllegalStateException("No user found with ID " + userId));
+		
+		if(comment.getCommentLikes().contains(user)) {
+			comment.getCommentLikes().remove(user);
+		}else {
+			comment.getCommentLikes().add(user);
+		}
+		
+		PostComment updatedComment = postCommentRepo.save(comment);
+		return postCommentMapper.mapToPostCommentDto(updatedComment);
+	}
+
+	@Override
+	public PostCommentDto replyComment(Long userId, Long commentId, PostCommentDto pdto) {
+		 	Users user = userRepo.findById(userId).orElseThrow(() -> new IllegalStateException("There is no user"));
+	        PostComment parentComment = postCommentRepo.findById(commentId).orElseThrow(() -> new IllegalStateException("There is no comment"));
+
+	        // Create the reply comment entity
+	        PostComment replyComment = new PostComment();
+	        replyComment.setText(pdto.getText());
+	        replyComment.setUser(user);
+	        replyComment.setPost(parentComment.getPost());
+	        replyComment.setParentComment(parentComment); // Set the parent comment
+
+	        // Save the reply comment
+	        postCommentRepo.save(replyComment);
+
+	        // Optionally, you can add this reply to the parent's replies list
+	        parentComment.getReplies().add(replyComment);
+	        postCommentRepo.save(parentComment);
+
+	        return postCommentMapper.mapToPostCommentDto(replyComment);
 	}
 
 }

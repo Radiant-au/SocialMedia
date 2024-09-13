@@ -49,7 +49,7 @@ public class Users {
 	  Set<Users> followers = new HashSet<>();
 	  
 	  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY , cascade = CascadeType.ALL, orphanRemoval = true)
-	    private List<Post> posts = new ArrayList<>();
+	  private List<Post> posts = new ArrayList<>();
 	  
 	  @ManyToMany(fetch = FetchType.LAZY)
 	  @JoinTable(

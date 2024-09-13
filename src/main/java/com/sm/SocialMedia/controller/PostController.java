@@ -16,10 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sm.SocialMedia.Response.ApiResponse;
-import com.sm.SocialMedia.dto.PostCommentDto;
 import com.sm.SocialMedia.dto.PostDto;
 import com.sm.SocialMedia.dto.UsersDto;
-import com.sm.SocialMedia.service.PostCommentService;
 import com.sm.SocialMedia.service.postService;
 import com.sm.SocialMedia.service.userService;
 
@@ -29,9 +27,6 @@ public class PostController {
 	
 	@Autowired
 	postService pService;
-	
-	@Autowired
-	PostCommentService cService;
 	
 	@Autowired
 	userService uService;
@@ -87,20 +82,5 @@ public class PostController {
 		return new ResponseEntity<>(post , HttpStatus.ACCEPTED);
 	}
 	
-	@PostMapping("{postId}/comments")
-	public ResponseEntity<PostCommentDto> addComment(@PathVariable Long postId , @RequestHeader("Authorization") String jwt , @RequestBody PostCommentDto cdto) {
-		UsersDto udto = uService.getUserfromToken(jwt);
-		 PostCommentDto comment = cService.addComment(udto.getId(), postId, cdto);
-		 
-		 return new ResponseEntity<>(comment , HttpStatus.ACCEPTED);
-	}
-	
-	@DeleteMapping("/comments/{commentId}")
-	public ResponseEntity<ApiResponse> deleteComment(@PathVariable Long commentId ,@RequestHeader("Authorization") String jwt){
-		UsersDto udto = uService.getUserfromToken(jwt);
-		String message = cService.deleteComment(udto.getId(), commentId);
-		ApiResponse res = new ApiResponse(message , true);
-		
-		return new ResponseEntity<>(res , HttpStatus.OK);
-	}
+
 }

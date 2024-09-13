@@ -40,11 +40,22 @@ public class postMapper {
             new ArrayList<>()
         );
 
-        // Set the comments after Post has been created
+     // Set the comments after Post has been created
         if (postDto.getComments() != null) {
             post.setComments(
                 postDto.getComments().stream()
-                    .map(commentDto -> postCommentMapper.mapToPostComment(commentDto, post , user)) // Now Post is available
+                    .map(commentDto -> {
+                        // Map liked users for the comment
+                        Set<Users> likedUsersForComment = commentDto.getLikedUserIds() != null ?
+                            commentDto.getLikedUserIds().stream().map(userId -> {
+                                Users likedUser = new Users();
+                                likedUser.setId(userId);
+                                return likedUser;
+                            }).collect(Collectors.toSet()) : new HashSet<>();
+                        
+                        // Call the method with all five parameters
+                        return postCommentMapper.mapToPostComment(commentDto, post, user, null, likedUsersForComment);  // For top-level comments, parentComment is null
+                    })
                     .collect(Collectors.toList())
             );
         }
