@@ -16,6 +16,7 @@ public class PostCommentDto {
 	 	private Long id;
 	    private String text;
 	    private Long postId;
+	    private String profileImg;
 	    private String username;
 	    private Set<Long> likedUserIds;
 	    private List<Long> replyId;

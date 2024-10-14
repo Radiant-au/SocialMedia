@@ -31,6 +31,7 @@ public class Users {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
+	String profileImg;
 	String username;
 	String email;
 	String password;
@@ -74,6 +75,9 @@ public class Users {
 		this.gender = gender;
 	}
 	  
-	  
+	public Users( String username, String profileImg) {
+		this.username = username;
+		this.profileImg = profileImg;
+	} 
 	
 }

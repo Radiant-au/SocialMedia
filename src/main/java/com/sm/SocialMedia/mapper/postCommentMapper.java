@@ -19,6 +19,7 @@ public class postCommentMapper {
             comment.getId(),
             comment.getText(),
             comment.getPost().getId(),             // Post ID
+            comment.getUser().getProfileImg(),
             comment.getUser().getUsername(),       // Username
             comment.getCommentLikes() != null ? 
                 comment.getCommentLikes().stream()  // Map liked user IDs

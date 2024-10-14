@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sm.SocialMedia.dto.UsersDto;
 import com.sm.SocialMedia.dto.UsersRegisterDto;
+import com.sm.SocialMedia.dto.userUpdateDto;
 import com.sm.SocialMedia.service.userService;
 
 @RestController
@@ -45,7 +46,7 @@ public class UserController {
 	}
 	
 	@PutMapping
-	public UsersDto UpdateUser(@RequestHeader("Authorization")String jwt , @RequestBody UsersRegisterDto udto) {
+	public UsersDto UpdateUser(@RequestHeader("Authorization")String jwt , @RequestBody userUpdateDto udto) {
 		UsersDto reqUser = uService.getUserfromToken(jwt);
 		UsersDto updateUser = uService.UpdateUser(reqUser.getId(), udto);
 		return updateUser;

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sm.SocialMedia.dto.UsersDto;
 import com.sm.SocialMedia.dto.UsersRegisterDto;
+import com.sm.SocialMedia.dto.userUpdateDto;
 
 public interface userService {
 	
@@ -15,7 +16,7 @@ public interface userService {
 	
 	public UsersDto followUser(Long id1 , Long id2);
 	
-	public UsersDto UpdateUser(Long id ,UsersRegisterDto udto);
+	public UsersDto UpdateUser(Long id ,userUpdateDto udto);
 	
 	public List<UsersDto> searchUser(String query);
 	

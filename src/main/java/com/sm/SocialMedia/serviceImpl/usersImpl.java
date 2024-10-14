@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.sm.SocialMedia.config.jwtGenerator;
 import com.sm.SocialMedia.dto.UsersDto;
 import com.sm.SocialMedia.dto.UsersRegisterDto;
+import com.sm.SocialMedia.dto.userUpdateDto;
 import com.sm.SocialMedia.entity.Users;
 import com.sm.SocialMedia.mapper.usersMapper;
 import com.sm.SocialMedia.repository.userRepository;
@@ -51,11 +52,11 @@ public class usersImpl implements userService{
 	}
 
 	@Override
-	public UsersDto UpdateUser(Long id,UsersRegisterDto udto) {
+	public UsersDto UpdateUser(Long id,userUpdateDto udto) {
 		Users user = userRepo.findById(id).orElseThrow(() -> new IllegalStateException("User does not exist wiht Id = " + id));
 		Optional.ofNullable(udto.getUsername()).ifPresent(user::setUsername);
-		Optional.ofNullable(udto.getEmail()).ifPresent(user::setEmail);
-		Optional.ofNullable(udto.getGender()).ifPresent(user::setGender);
+		Optional.ofNullable(udto.getProfileImg()).ifPresent(user::setProfileImg);
+	
 		
 		Users updated_user = userRepo.save(user);
 		
