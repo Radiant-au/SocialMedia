@@ -17,6 +17,7 @@ import lombok.Setter;
 public class UsersDto {
 	  	private Long id;
 	    private String username;
+	    private String profileImg;
 	    private String email;
 	    private String gender;
 	    // Follower and Following information
