@@ -25,7 +25,7 @@ public class postCommentMapper {
                 comment.getCommentLikes().stream()  // Map liked user IDs
                     .map(Users::getId)
                     .collect(Collectors.toSet()) : new HashSet<>(),
-            mapRepliesToIds(comment.getReplies())   // Map replies to reply IDs
+            mapRepliesToIds(comment.getReplies())   // Map replies to reply ID
         );
     }
 
