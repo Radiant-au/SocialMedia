@@ -10,8 +10,8 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
 @Getter
+@Setter
 public class PostCommentDto {
 	 	private Long id;
 	    private String text;

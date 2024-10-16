@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sm.SocialMedia.dto.UsersDto;
-import com.sm.SocialMedia.dto.UsersRegisterDto;
 import com.sm.SocialMedia.dto.userUpdateDto;
 import com.sm.SocialMedia.service.userService;
 

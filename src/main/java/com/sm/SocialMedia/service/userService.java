@@ -3,7 +3,6 @@ package com.sm.SocialMedia.service;
 import java.util.List;
 
 import com.sm.SocialMedia.dto.UsersDto;
-import com.sm.SocialMedia.dto.UsersRegisterDto;
 import com.sm.SocialMedia.dto.userUpdateDto;
 
 public interface userService {
