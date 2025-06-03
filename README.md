@@ -19,12 +19,12 @@ A Java-based application designed to manage and analyze social media interaction
 1. Clone the repository:
    ```bash
    git clone https://github.com/Radiant-au/SocialMedia.git
-  `
+   
 2. Build the project using Maven:
    ```bash
     ./mvnw clean install
-   ```
+   
 3. Run the application:
    ```bash
      ./mvnw sping-boot:run
-   ```
+   
